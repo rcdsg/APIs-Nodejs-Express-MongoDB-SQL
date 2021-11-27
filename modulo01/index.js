@@ -14,32 +14,49 @@ CRUD = Create, Read, Update, Delete
 */
 const cursos = ['Node JS', 'JavaScript', 'React Native'];
 
-server.get('/cursos', (req, res)=> {
+// MIDDLEWARE GLOBAL
+server.use( (req,res, next) =>{
+    console.log(`URL chamda: ${req.url}`);
+    return next();
+})
+// MIDDLEWARE checkcurso
+function checkCurso(req, res, next){
+    if(!req.body.name){
+        return res.status(400).json({error: "Nome do curso é obrigatório!"})
+    }
+    return next();
+}
+// MIDDLEWARE checkIndexCurso
+function checkIndexCurso(req, res, next){
+    const curso = cursos[req.params.index]
+    if(!curso){
+        return res.status(400).json({error: "Curso não encontrado!"})
+    }
+    req.curso = curso;
+    return next();
+}
+
+// LISTAR TODOS
+server.get('/cursos', (req, res) => {
     return res.json(cursos);
+  });
+
+//BUSCA POR INDEX/ID
+server.get('/cursos/:index', checkIndexCurso, (req, res) => {
+    //const { index } = req.params;
+    return res.json(req.curso)
 });
 
-server.get('/cursos/:index', (req, res) => {
-/*
-    return res.send('Hello World!');
-    const nome = req.query.nome;
-    const cargo = req.query.cargo;
-    const id = req.params.id;
-*/
-    const { index } = req.params;
-    return res.json(cursos[index])
-    //return res.json({curso: `Curso de Node js ID: ${id}. Aluno: ${nome} Cargo: ${cargo}`})
-})
-
 //Criando um novo curso
-server.post('/cursos', (req, res)=> {
+server.post('/cursos', checkCurso, (req, res)  => {
     const { name } = req.body;
-    cursos.push(name);
+    cursos.push( name );
   
     return res.json(cursos);
 });
 
 //Atualizando um curso
-server.put('/cursos/:index', (req,res) => {
+server.put('/cursos/:index', checkCurso, checkIndexCurso, (req, res) => {
     const {index} = req.params;
     const {name} = req.body;
 
@@ -49,11 +66,12 @@ server.put('/cursos/:index', (req,res) => {
 })
 
 //Deletando um curso
-server.delete('/cursos/:index', (req,res) => {
+server.delete('/cursos/:index', checkIndexCurso, (req, res) => {
     const {index} = req.params;
 
-    cursos.splice(index,1);
-    return res.json(cursos);
+    cursos.splice(index, 1);
+    return res.send();
+    //return res.json(cursos);
 })
 
 server.listen(3000);
