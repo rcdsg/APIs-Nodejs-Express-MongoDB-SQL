@@ -12,11 +12,7 @@ class App{
             useUnifiedTopology : true,
         });
         */
-        mongoose.connect('mongodb+srv://rcdsg:MKPG7lT3cwPcZP19@aplicacaocurso.ih9bj.mongodb.net/myFirstDatabase?retryWrites=true&w=majority',
-        {
-            useNewUrlParser: true,
-            useUnifiedTopology: true,
-        });
+        mongoose.connect('mongodb+srv://rcdsg:MKPG7lT3cwPcZP19@aplicacaocurso.ih9bj.mongodb.net/myFirstDatabase?retryWrites=true&w=majority');
 
         this.middlewares();
         this.routes();
