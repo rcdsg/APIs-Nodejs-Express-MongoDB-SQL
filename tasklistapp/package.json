@@ -4,6 +4,9 @@
   "main": "index.js",
   "author": "Rodrigo Costa",
   "license": "MIT",
+  "scripts": {
+    "dev": "nodemon src/server.js"
+  },
   "dependencies": {
     "express": "^4.17.1"
   },
