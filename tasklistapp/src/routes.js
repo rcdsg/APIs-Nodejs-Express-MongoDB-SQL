@@ -1,6 +1,7 @@
 import { Router } from "express";
 import UserController from "./app/controllers/UserController";
 import SessionController from "./app/controllers/SessionController";
+import TaskController from "./app/controllers/TaskController";
 
 import authMiddleware from "./app/middlewares/auth";
 
@@ -13,5 +14,10 @@ routes.post("/sessions", SessionController.store);
 // Routes to be authenticated
 routes.use(authMiddleware);
 routes.put("/users", UserController.update);
+
+routes.post("/tasks", TaskController.store);
+routes.get("/tasks", TaskController.index);
+routes.put("/tasks/:task_id", TaskController.update);
+routes.delete("/tasks/:task_id", TaskController.delete);
 
 export default routes;
